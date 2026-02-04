@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+build/
+develop-eggs/
+dist/
+downloads/
+env/
+lib/
+lib64/
+parts/
+sdist/
+var/
+
+# Virtual environments
+.env
+.venv
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django-specific
+*.log
+*.pot
+media/ # User-uploaded media files (often handled by a separate storage service in production)
+staticfiles/ # Collected static files (generated during deployment)
+local_settings.py # Local configuration file (contains sensitive info)
+db.sqlite3 # Local SQLite database file
+
+# IDE-specific (VS Code, PyCharm, etc.)
+.idea/
+.vscode/
+
+# OS-specific
+.DS_Store # macOS
+Thumbs.db # Windows

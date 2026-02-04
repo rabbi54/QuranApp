@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Quran Reader{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;700&family=Amiri:wght@400;700&family=Lateef&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="quran-container">
+    <div class="surah-header">
+        <h2>Quran Reader</h2>
+        <p>Read and listen to the Holy Quran</p>
+        <div class="arabic-name">القرآن الكريم</div>
+    </div>
+
+    <div class="controls">
+        <select id="surah-selector">
+            <option value="">Select Surah...</option>
+            {% for surah in surahs %}
+                <option value="{{ surah.number }}">{{ surah.number }}. {{ surah.name_english }} - {{ surah.name_translation_bn }}</option>
+            {% endfor %}
+        </select>
+        
+        <select id="recitation-selector">
+            <option value="1">Alafasy</option>
+            <option value="2">Abdul Basit</option>
+            <option value="3">Al Muaiqly</option>
+        </select>
+        
+        <input type="number" id="go-to-ayah" placeholder="Go to Ayah" min="1">
+        <button><i class="fas fa-search"></i></button>
+    </div>
+
+    <div id="bismillah-placeholder"></div>
+    
+    <div id="verses-container">
+        <div class="welcome-message">
+            <i class="fas fa-quran"></i>
+            <h3>Welcome to Quran Reader</h3>
+            <p>Select a Surah from the dropdown above to begin reading.</p>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <button id="prev-page" disabled>
+            <i class="fas fa-chevron-left"></i> Previous
+        </button>
+        <span id="page-info">Page 1 of 1</span>
+        <button id="next-page" disabled>
+            Next <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Audio Player -->
+<div class="audio-player-container" id="audio-player">
+    <button class="minimize-btn" id="minimize-btn">
+        <i class="fas fa-chevron-down" id="minimize-icon"></i>
+    </button>
+    
+    <div class="audio-player-main">
+        <div class="player-info">
+            <h4 id="current-surah">Select a verse to play</h4>
+            <p id="current-ayah"></p>
+        </div>
+        
+        <div class="player-controls">
+            <div class="progress-container">
+                <span class="time-display current" id="current-time">0:00</span>
+                <div class="progress-bar" onclick="seekAudio(event)">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="time-display total" id="duration">0:00</span>
+            </div>
+            
+            <div class="controls-row">
+                <button class="player-btn secondary" title="Previous" id="prev-btn">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                
+                <button class="player-btn play-btn" id="play-btn" title="Play/Pause">
+                    <i class="fas fa-play" id="play-icon"></i>
+                </button>
+                
+                <button class="player-btn secondary" title="Next" id="next-btn">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+                
+                <button class="player-btn secondary"  id="repeat-btn" title="Repeat">
+                    <i class="fa-solid fa-repeat"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="extra-controls">
+            <div class="volume-control">
+                <button class="player-btn secondary" id="volume-btn" title="Mute">
+                    <i class="fas fa-volume-up" id="volume-icon"></i>
+                </button>
+            </div>
+            
+            <button class="speed-btn" id="speed-btn" title="Speed">
+                1.0x
+            </button>
+        </div>
+    </div>
+</div>
+
+<audio id="quran-audio" preload="metadata"></audio>
+<audio id="bismillah-audio" style="display: none;" preload="metadata"></audio>
+
+<!-- Word Modal -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeModal()"></div>
+<!-- In your word-modal HTML -->
+<div class="word-modal" id="word-modal">
+    <div class="modal-content">
+        <h3 id="word-arabic"></h3>
+        
+        <div class="word-details">
+            <p><strong>Transliteration:</strong> <span id="word-transliteration"></span></p>
+            <p><strong>Meaning:</strong> <span id="word-meaning"></span></p>
+            <p><strong>Root Word:</strong> <span id="word-root"></span></p>
+        </div>
+        
+        <!-- Audio Player Section -->
+        <div id="word-audio-container" style="display: none;">
+            <div class="audio-player">
+                <audio id="word-audio-player" controls>
+                    <source id="word-audio-source" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="/static/js/app.js"></script>
+<link rel="stylesheet" href="/static/css/bismillah.css">
+
+{% endblock %}
